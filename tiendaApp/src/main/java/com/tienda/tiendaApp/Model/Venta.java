@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "venta", schema = "tienda")
@@ -57,5 +58,9 @@ public class Venta {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+    public List<DetalleVenta> getDetalles() {
+        List<DetalleVenta> detalles = List.of();
+        return detalles;
+    }
 
-}
+    }

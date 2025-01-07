@@ -70,7 +70,7 @@ public class Usuario {
     @Size(max = 50)
     @NotNull
     @Column(name = "rol", nullable = false, length = 50)
-    private String rol;
+    private String rol;//admin, vendedor
 
 
 }

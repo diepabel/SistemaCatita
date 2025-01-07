@@ -3,9 +3,11 @@ package com.tienda.tiendaApp.Repository;
 import com.tienda.tiendaApp.Model.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductoRepository extends JpaRepository<Producto, Long> {
-    Producto findProductoById(Integer Id);
-    Producto findProductoByCodigodebarras(String codigodebarras);
+import java.util.List;
+import java.util.Optional;
 
-    Producto deleteProductoByCodigodebarras(String codigodebarras);
+public interface ProductoRepository extends JpaRepository<Producto, Long> {
+    Optional<Producto> findByCodigodebarras(String codigodebarras);
+    void deleteByCodigodebarras(String codigodebarras);
+
 }

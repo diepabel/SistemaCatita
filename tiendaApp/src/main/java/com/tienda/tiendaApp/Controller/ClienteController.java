@@ -1,46 +1,41 @@
 package com.tienda.tiendaApp.Controller;
 
 import com.tienda.tiendaApp.Model.Cliente;
-import com.tienda.tiendaApp.Repository.ClienteRepository;
+import com.tienda.tiendaApp.Service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
+@CrossOrigin(origins = "*")
 public class ClienteController {
+
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClienteService clienteService;
+
     @PostMapping("/Cliente/{nombre}/{direccion}/{telefono}/{email}")
-    public String crearCliente(@PathVariable String nombre, @PathVariable String direccion, @PathVariable String telefono, @PathVariable String email) {
-        Cliente cliente = new Cliente();
-        cliente.setNombre(nombre);
-        cliente.setDireccion(direccion);
-        cliente.setTelefono(telefono);
-        cliente.setEmail(email);
-        clienteRepository.save(cliente);
-        return "Cliente creado";
+    public String crearCliente(@RequestBody Cliente cliente) {
+        return clienteService.crearCliente(cliente);
     }
-    @PutMapping("/Cliente/{id}/{nombre}/{direccion}/{telefono}/{email}")
-    public String actualizarCliente(@PathVariable Long id, @PathVariable String nombre, @PathVariable String direccion, @PathVariable String telefono, @PathVariable String email) {
-        Cliente cliente = clienteRepository.findById(id).get();
-        cliente.setNombre(nombre);
-        cliente.setDireccion(direccion);
-        cliente.setTelefono(telefono);
-        cliente.setEmail(email);
-        clienteRepository.save(cliente);
-        return "Cliente actualizado";
+
+    @PutMapping("/Cliente/{id}")
+    public String actualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
+        return clienteService.actualizarCliente( id, cliente);
     }
 
     @DeleteMapping("/Cliente/{id}")
     public String borrarCliente(@PathVariable Long id) {
-        clienteRepository.deleteById(id);
-        return "cliente eliminado";
+        return clienteService.borrarCliente(id);
     }
 
     @GetMapping("/Cliente/{id}")
-    public String obtenerCliente(@PathVariable Long id) {
-        Cliente cliente = clienteRepository.findById(id).get();
+    public Cliente obtenerCliente(@PathVariable Long id) {
+        return clienteService.obtenerCliente(id);
+    }
 
-
-        return "Clientes registrados";
+    @GetMapping("/Clientes")
+    public List<Cliente> obtenerClientes() {
+        return clienteService.obtenerClientes();
     }
 }

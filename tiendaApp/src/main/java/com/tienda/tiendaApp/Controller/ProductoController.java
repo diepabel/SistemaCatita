@@ -2,6 +2,7 @@ package com.tienda.tiendaApp.Controller;
 
 import com.tienda.tiendaApp.Model.Producto;
 import com.tienda.tiendaApp.Repository.ProductoRepository;
+import com.tienda.tiendaApp.Service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,52 +13,34 @@ import java.util.Map;
 
 @RestController
 public class ProductoController {
+
+      @Autowired
+    private ProductoService productoService;
     @Autowired
     private ProductoRepository productoRepository;
+
     @PostMapping("/Producto/{nombre}/{codigodebarras}/{descripcion}/{precio}/{stock}")
-    public String crearProducto(@PathVariable String nombre,@PathVariable String codigodebarras, @PathVariable String descripcion, @PathVariable Double precio , @PathVariable int stock ) {
-        Producto producto = new Producto();
-        producto.setNombre(nombre);
-        producto.setCodigodebarras(codigodebarras);
-        producto.setDescripcion(descripcion);
-        producto.setPrecio(precio);
-        producto.setStock(stock);
+    public String crearProducto(@RequestBody Producto producto) {
         productoRepository.save(producto);
-        return "Producto creado";
-    }
-    @PutMapping ("/Producto/{id}/{nombre}/{codigodebarras}/{descripcion}/{precio}/{stock}")
-    public String actualizarProducto(@PathVariable Long id, @PathVariable String nombre,@PathVariable String codigodebarras, @PathVariable String descripcion, @PathVariable Double precio, @PathVariable int stock) {
-        Producto producto = productoRepository.findProductoByCodigodebarras(codigodebarras);
-        producto.setNombre(nombre);
-        producto.setCodigodebarras(codigodebarras);
-        producto.setDescripcion(descripcion);
-        producto.setPrecio(precio);
-        producto.setStock(stock);
-        productoRepository.save(producto);
-        return "Producto actualizado";
+        return productoService.crearProducto(producto);
+            }
+    @PutMapping("/Producto/{codigodebarras}")
+     public String actualizarProducto(@PathVariable Long codigodebarras, @RequestBody Producto producto) {
+        return productoService.actualizarProducto(codigodebarras, producto);
     }
     @DeleteMapping("/Producto/{codigodebarras}")
-    public String borrarProducto(@PathVariable String codigodebarras) {
-        Producto producto = productoRepository.deleteProductoByCodigodebarras(codigodebarras);
-        return "Producto eliminado";
+    public String borrarProducto(@PathVariable Long codigodebarras) {
+        return productoService.borrarProducto(codigodebarras);
     }
     @GetMapping("/Producto/{codigodebarras}")
-    public Producto obtenerProducto(@PathVariable String codigodebarras) {
-        Producto producto  = productoRepository.findProductoByCodigodebarras(codigodebarras);
-        return producto;
+    public Producto obtenerProducto(@PathVariable Long codigodebarras) {
+        return productoService.obtenerProducto(codigodebarras);
     }
-//    @GetMapping("/Producto")
-//    public List<Map<String, Object>> obtenerProductos() {
-//        List<Map<String, Object>> productosSinDescripcion = new ArrayList<>();
-//        for (Producto producto : productoRepository.findAll()) {
-//            Map<String, Object> productoMap = new HashMap<>();
-//            productoMap.put("id", producto.getId());
-//            productoMap.put("nombre", producto.getNombre());
-//            productoMap.put("precio", producto.getPrecio());
-//            productoMap.put("stock", producto.getStock());
-//            productosSinDescripcion.add(productoMap);
-//        }
-//        return productosSinDescripcion;
-//    }
+    @GetMapping("/Productos")
+    public List<Producto> obtenerProductos() {
+
+        return productoService.obtenerProductos();
+    }
+
 
 }
