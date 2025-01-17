@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
+
 public class ProductoController {
 
       @Autowired
@@ -19,7 +21,7 @@ public class ProductoController {
     @Autowired
     private ProductoRepository productoRepository;
 
-    @PostMapping("/Producto/{nombre}/{codigodebarras}/{descripcion}/{precio}/{stock}")
+    @PostMapping("/Producto/crear")
     public String crearProducto(@RequestBody Producto producto) {
         productoRepository.save(producto);
         return productoService.crearProducto(producto);

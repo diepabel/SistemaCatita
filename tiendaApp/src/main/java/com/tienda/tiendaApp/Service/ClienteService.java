@@ -11,9 +11,11 @@ import java.util.List;
 public class ClienteService {
 
     private ClienteRepository clienteRepository;
-    public  ClienteService(ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
+
+
         public String crearCliente(Cliente cliente) {
         clienteRepository.save(cliente);
              return "Cliente creado";

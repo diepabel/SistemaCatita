@@ -16,7 +16,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @PostMapping("/Usuario")
+    @PostMapping("/Usuario/crear")
     public String crearUsuario(@RequestBody Usuario usuario) {
         usuarioRepository.save(usuario);
         return usuarioService.crearUsuario(usuario);
@@ -33,7 +33,7 @@ public class UsuarioController {
     public Usuario obtenerUsuario(@PathVariable Long id) {
         return usuarioService.obtenerUsuario(id);
     }
-    @GetMapping("/Usuario")
+    @GetMapping("/Usuarios")
     public List<Map<String, Object>> obtenerUsuarios() {
         return usuarioService.obtenerUsuarios();
     }

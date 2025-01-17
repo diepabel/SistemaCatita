@@ -1,6 +1,7 @@
 package com.tienda.tiendaApp.Controller;
 
 import com.tienda.tiendaApp.Model.Cliente;
+import com.tienda.tiendaApp.Repository.ClienteRepository;
 import com.tienda.tiendaApp.Service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,10 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private ClienteRepository clienteRepository;
 
-    @PostMapping("/Cliente/{nombre}/{direccion}/{telefono}/{email}")
+    @PostMapping("/Cliente/crear")
     public String crearCliente(@RequestBody Cliente cliente) {
         return clienteService.crearCliente(cliente);
     }

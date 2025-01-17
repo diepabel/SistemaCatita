@@ -25,18 +25,22 @@ public class ClienteDTO {
     public void setEmail(String email) {
         this.email = email;
     }
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-    public String getDireccion() {
-        return direccion;
-    }
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-    public String getTelefono() {
-        return telefono;
-    }
+public String getDireccion() {
+    return direccion;
+}
+
+public void setDireccion(String direccion) {
+    this.direccion = direccion;
+}
+
+public String getTelefono() {
+    return telefono;
+}
+
+public void setTelefono(String telefono) {
+    this.telefono = telefono;
+}
+
     private Integer id;
     private String nombre;
     private String email;

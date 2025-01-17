@@ -26,7 +26,7 @@ public class ProveedorService {
         proveedorActualizado.setDireccion(proveedor.getDireccion());
         proveedorActualizado.setTelefono(proveedor.getTelefono());
         proveedorActualizado.setEmail(proveedor.getEmail());
-        proveedorRepository.save(proveedor);
+        proveedorRepository.save(proveedorActualizado);
         return "Proveedor actualizado";
     }
     public String borrarProveedor(Long id) {

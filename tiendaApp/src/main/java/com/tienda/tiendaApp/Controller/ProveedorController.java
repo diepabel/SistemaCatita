@@ -7,14 +7,16 @@ import com.tienda.tiendaApp.Service.ProveedorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/Proveedor")
+@CrossOrigin(origins = "*")
 public class ProveedorController {
 
     @Autowired
     private ProveedorService proveedorService;
 
-    @PostMapping("/Proveedor/{nombre}/{direccion}/{telefono}/{email}")
+    @PostMapping("/Proveedor/crear")
     public String crearProveedor(@RequestBody Proveedor proveedor) {
         return proveedorService.crearProveedor(proveedor);
     }
@@ -26,12 +28,14 @@ public class ProveedorController {
     public String borrarProveedor(@PathVariable Long id) {
         return proveedorService.borrarProveedor(id);
     }
+
     @GetMapping("/Proveedor/{id}")
     public Proveedor obtenerProveedor(@PathVariable Long id) {
         return proveedorService.obtenerProveedor(id);
     }
+
     @GetMapping("/Proveedores")
-    public Iterable<Proveedor> obtenerProveedores() {
+    public List<Proveedor> obtenerProveedores() {
         return proveedorService.obtenerProveedores();
     }
 

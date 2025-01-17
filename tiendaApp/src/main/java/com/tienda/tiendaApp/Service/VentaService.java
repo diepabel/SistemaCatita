@@ -5,59 +5,39 @@ import com.tienda.tiendaApp.Model.Producto;
 import com.tienda.tiendaApp.Model.Venta;
 import com.tienda.tiendaApp.Repository.ProductoRepository;
 import com.tienda.tiendaApp.Repository.VentaRepository;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+
 @Service
 public class VentaService {
-    @Autowired
-    private VentaRepository ventaRepository;
 
-    @Autowired
-    private ProductoRepository productoRepository;
+    private final VentaRepository ventaRepository;
+    private final ProductoRepository productoRepository;
 
-    public Venta registrarVenta(Venta venta) {
-        Double totalVenta = 0.0;
+    public VentaService(VentaRepository ventaRepository, ProductoRepository productoRepository) {
+        this.ventaRepository = ventaRepository;
+        this.productoRepository = productoRepository;
+    }
 
+    public String realizarVenta(Venta venta) {
+        double total = 0.0;
         for (DetalleVenta detalle : venta.getDetalles()) {
-            Producto producto = productoRepository.findById( detalle.getProducto().getId().longValue() )
-                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
-
-            if (producto.getStock() < detalle.getCantidad()) {
-                throw new RuntimeException("Stock insuficiente para el producto: " + producto.getNombre());
+            Producto producto = productoRepository.findById(detalle.getProducto().getId().longValue()).orElse(null);
+            if (producto != null) {
+                detalle.setPrecioUnitario(producto.getPrecio());
+                double precioTotal = detalle.getPrecioUnitario() * detalle.getCantidad();
+                detalle.setPrecioTotal(precioTotal);
+                detalle.setImpuesto(precioTotal * 0.18); // Ejemplo de cálculo de impuestos
+                detalle.setDescuento(0.0); // Ejemplo de descuentos
+                total += precioTotal;
+                detalle.setVenta(venta);
             }
-
-            producto.setStock(producto.getStock() - detalle.getCantidad());
-            productoRepository.save(producto);
-
-            detalle.setPrecioUnitario(producto.getPrecio());
-            Double subtotal = producto.getPrecio() * detalle.getCantidad();
-            Double descuento = detalle.getDescuento() != null ? detalle.getDescuento() : 0.0;
-            Double impuesto = detalle.getImpuesto() != null ? detalle.getImpuesto() : 0.0;
-
-            Double totalDetalle = subtotal - descuento + impuesto;
-            detalle.setPrecioTotal(totalDetalle);
-            totalVenta += totalDetalle;
-
-            detalle.setVenta(venta); // Relación bidireccional
         }
-
-        venta.setTotal(totalVenta);
+        venta.setTotal(total);
         venta.setFecha(LocalDate.now());
-        return ventaRepository.save(venta);
-    }
-
-    public Venta actualizarVenta(@Valid Venta venta) {
-        return ventaRepository.save(venta);
-    }
-
-    public void eliminarVenta(Long id) {
-    }
-
-    public Venta obtenerVenta(Long id) {
-        return ventaRepository.findById(id);
+        ventaRepository.save(venta);
+        return "Venta realizada";
     }
 }
